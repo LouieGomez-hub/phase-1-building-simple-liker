@@ -1,12 +1,58 @@
 // Defining text characters for the empty and full hearts for you to use later.
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
+const errorModal = document.querySelector("#modal")
+const error = document.getElementById('modal')
+  error.setAttribute("class", 'hidden')
 
 // Your JavaScript code goes here!
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM CONTENT HAS LOADED")
+  errorModal.classList.add('hidden')
 
+  findLikes()
+  clickListener()
 
+})
 
+function hideError() {
+  errorModal.classList.add('hidden')
+}
 
+  function findLikes() {
+    const likeArr = document.querySelectorAll("like-glyph")
+
+    likeArr.forEach((singularLike) => {
+      singularLike.addEventListener("click", () => console.log("YOU FOUND ME! LIKE!"))
+    })
+  }
+
+function clickListener() {
+    document.addEventListener('click', (event) => {
+
+      if(event.target.classList[0] === 'like-glyph'){
+
+        mimicServerCall()
+          .then(() => {
+            if(event.target.innerText === EMPTY_HEART) {
+              event.target.classList.add('activated-heart')
+              event.target.innerText = FULL_HEART
+            }
+            else {
+              event.target.classList.remove('activated-heart')
+              event.target.innerText = EMPTY_HEART
+            }
+          })
+          .catch(error => {
+            errorModal.classList.remove('hidden')
+          setTimeout(() => {
+            hideError()
+          }, 3000)
+        })
+    }
+
+  })
+}
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
 //------------------------------------------------------------------------------
